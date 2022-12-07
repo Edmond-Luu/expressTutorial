@@ -1,4 +1,5 @@
 let express = require('express');
+const bodyParser = require('body-parser');
 let app = express();
 const mySecret = process.env['MESSAGE_STYLE']
 
@@ -6,6 +7,8 @@ app.use(function middleware(req, res, next){
   console.log(`${req.method} ${req.path} - ${req.ip}"`)
   next();
 });
+
+app.use(bodyParser.urlencoded({extended: false}));
 
 
 // app.get("/", (req, res) => {
@@ -40,6 +43,20 @@ app.get("/:word/echo", (req, res) => {
   const {word} = req.params
   res.json({
     echo: word
+  })
+})
+
+app.get("/name", (req, res) => {
+  const {first, last} = req.query;
+  res.json({
+    name: first + " " + last
+  })
+})
+
+app.post("/name", (req, res) => {
+  const name = req.body.first + " " + req.body.last;
+  res.json({
+    name
   })
 })
 
